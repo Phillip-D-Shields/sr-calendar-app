@@ -48,15 +48,16 @@ function App() {
       {/* ==== events display ==== */}
       <div>
         {/* TODO add edit and delete buttons */}
+        {/* TODO add css styles for events display */}
         <h3>Upcoming Events</h3>
         {upcomingEvents.length > 0 ? (
           <ul>
               {upcomingEvents.map((event: EventEntry) => (
-                <li key={event.id} className={event.date === selectedDate ? "current-date-event" : ""}>
+                <li key={event.id}>
                   <div className="event-date">{event.date}</div>
                   <strong>{event.title}</strong>
                   {event.startTime && <span className="event-time"> at {event.startTime}</span>}
-                  {event.endTime && <p className="event-desc"> till {event.endTime}</p>}
+                  {event.endTime && <p className="event-end"> till {event.endTime}</p>}
                 </li>
               ))}
           </ul>
