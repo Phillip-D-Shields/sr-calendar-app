@@ -1,19 +1,16 @@
 import { useState } from "react";
 import "./App.css";
-
-const parseDate = (input) => new Date(input).toISOString().split("T")[0]
+import EventForm from "./components/EventForm";
 
 function App() {
   const [selectedDate, setSelectedDate] = useState(() => {
-    const todayRaw = new Date();
-    const todayParsed = parseDate(todayRaw);
-    return todayParsed;
+    const today = new Date();
+    return today.toISOString().split("T")[0]; 
   });
 
   function handleDateChange(e) {
-    const newDateRaw = e.target.value;
-    const newDateParsed = parseDate(newDateRaw);
-    setSelectedDate(newDateParsed);
+    const newDate = e.target.value; 
+    setSelectedDate(newDate);
   }
 
   return (
@@ -33,6 +30,8 @@ function App() {
           onChange={handleDateChange}
         />
       </div>
+      <br />
+      <EventForm date={selectedDate} />
     </>
   );
 }
