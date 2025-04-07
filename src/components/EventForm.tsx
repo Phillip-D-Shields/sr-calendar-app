@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { EventEntry } from "../vite-env";
 
 interface EventFormProps {
   date: string;
+  onEventAdded: (event: EventEntry) => void;
 }
 
-function EventForm({ date }: EventFormProps) {
+function EventForm({ date, onEventAdded }: EventFormProps) {
   const twentyFourHours = [
     "0:00",
     "1:00",
@@ -30,14 +32,14 @@ function EventForm({ date }: EventFormProps) {
     "21:00",
     "22:00",
     "23:00",
-    "24:00",
   ];
 
   const [formData, setFormData] = useState({
     id: crypto.randomUUID(),
     title: "",
-    startTime: "9:00",
-    endTime: "17:00",
+    date: date,
+    startTime: "0:00",
+    endTime: "23:00",
   });
 
   function handleStartTimeChange(e) {
@@ -67,7 +69,14 @@ function EventForm({ date }: EventFormProps) {
 
   function submitEventEntryToLocalStorage(e) {
     e.preventDefault();
-    // TODO logic here
+    onEventAdded(formData);
+    setFormData({
+      id: crypto.randomUUID(),
+      title: "",
+      date: date,
+      startTime: "0:00",
+      endTime: "23:00",
+    })
   }
 
   const validEndTimes = twentyFourHours.filter((time) => {
@@ -77,15 +86,23 @@ function EventForm({ date }: EventFormProps) {
     );
   });
 
+  useEffect(() => {
+    setFormData(prevData => ({
+      ...prevData,
+      date: date
+    }));
+  }, [date]);
+
   return (
     <>
-      <h2>form goes here</h2>
       <form onSubmit={submitEventEntryToLocalStorage}>
         <input
           name="title"
           type="text"
           value={formData.title}
           onChange={handleInputChange}
+          minLength={2}
+          required
         />
         <input name="date" type="text" value={date} disabled />
 
@@ -93,6 +110,7 @@ function EventForm({ date }: EventFormProps) {
           name="startTime"
           value={formData.startTime}
           onChange={handleStartTimeChange}
+          required
         >
           {twentyFourHours.map((time) => (
             <option key={`start-${time}`} value={time}>
@@ -105,6 +123,7 @@ function EventForm({ date }: EventFormProps) {
           name="endTime"
           value={formData.endTime}
           onChange={handleInputChange}
+          required
         >
           {validEndTimes.map((time) => (
             <option key={`end-${time}`} value={time}>

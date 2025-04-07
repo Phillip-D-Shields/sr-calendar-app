@@ -2,11 +2,9 @@
 
 
 export type EventEntry = {
-    id: number,
+    id: string,
     title: string,
     date: string,
     startTime: string,
     endTime: string,
 }; 
-
-// TODO occurence enum
